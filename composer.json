@@ -1,0 +1,37 @@
+{
+  "name": "zoy/accessuser",
+  "description": "Storage User access",
+  "authors": [
+    {
+      "name": "Erick Giorgio",
+      "email": "erick@nuvem.com"
+    }
+  ],
+  "require": {
+    "illuminate/support": "5.2.*"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "~2.1",
+    "phpunit/phpunit": "~5.0",
+    "laracasts/testdummy": "~2.0",
+    "fzaninotto/faker": "~1.4",
+    "mockery/mockery": "0.9.*",
+    "symfony/css-selector": "3.1.*",
+    "symfony/dom-crawler": "3.1.*",
+    "orchestra/testbench": "~3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/",
+      "Zoy\\Accessuser\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/TestCasePackages.php"
+    ],
+    "psr-4": {
+      "Zoy\\Accessuser\\": "src"
+    }
+  }
+}
