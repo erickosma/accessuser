@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use Zoy\Accessuser\Bases\MigrationAccess;
 
-class CreateAccessRoutesTable extends Migration
+class CreateAccessRoutesTable extends MigrationAccess
 {
+
+    protected $table = 'access_routes';
+
     /**
      * Run the migrations.
      *
@@ -12,19 +15,15 @@ class CreateAccessRoutesTable extends Migration
      */
     public function up()
     {
-        Schema::create('access_routes', function (Blueprint $table) {
-            $table->increments('id');
+        $this->createSchema(function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('access_user_id')->index();
+            $table->string('name')->index();
+            $table->string('action');
+            $table->string('path');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::drop('access_routes');
-    }
+
 }

@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use Zoy\Accessuser\Bases\MigrationAccess;
 
-class CreateAccessDomainsTable extends Migration
+class CreateAccessDomainsTable extends MigrationAccess
 {
+
+    protected $table = 'access_domains';
     /**
      * Run the migrations.
      *
@@ -12,19 +14,16 @@ class CreateAccessDomainsTable extends Migration
      */
     public function up()
     {
-        Schema::create('access_domains', function (Blueprint $table) {
-            $table->increments('id');
+        $this->createSchema(function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('access_user_id')->index();
+            $table->string('url')->index();
+            $table->string('host');
+            $table->string('search_terms_hash')->nullable();
+            $table->string('search_terms_hash')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::drop('access_domains');
-    }
+
 }

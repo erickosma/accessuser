@@ -35,4 +35,35 @@ class AccessUserLogServiceProvider extends ServiceProvider
     {
         $this->app->register(Providers\RouteServiceProvider::class);
     }
+
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Getters & Setters
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the config repository.
+     *
+     * @return \Illuminate\Contracts\Config\Repository
+     */
+    private function config()
+    {
+        return $this->app['config'];
+    }
+
+    /**
+     * Get the tracker config.
+     *
+     * @param  string      $key
+     * @param  mixed|null  $default
+     *
+     * @return mixed
+     */
+    protected function getConfig($key, $default = null)
+    {
+        return $this->config()->get("accessuser.$key", $default);
+    }
+
+
+
 }

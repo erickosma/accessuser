@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use Zoy\Accessuser\Bases\MigrationAccess;
 
-class CreateAccessEventUsersTable extends Migration
+class CreateAccessEventUsersTable extends MigrationAccess
 {
+
+    protected $table = 'access_event_users';
+
     /**
      * Run the migrations.
      *
@@ -12,19 +15,13 @@ class CreateAccessEventUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('access_event_users', function (Blueprint $table) {
-            $table->increments('id');
+        $this->createSchema(function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('access_user_id')->index();
+            $table->bigInteger('evento_id')->index();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::drop('access_event_users');
-    }
+
 }

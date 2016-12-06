@@ -23,7 +23,6 @@ class AccessUserLogServiceProviderTest extends TestCasePackages
     public function setUp()
     {
         $this->setUpMocks();
-
         $this->service_provider = new AccessUserLogServiceProvider($this->application_mock);
         parent::setUp();
     }

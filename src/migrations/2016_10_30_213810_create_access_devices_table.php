@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use Zoy\Accessuser\Bases\MigrationAccess;
 
-class CreateAccessDevicesTable extends Migration
+class CreateAccessDevicesTable extends MigrationAccess
 {
     /**
      * Run the migrations.
@@ -12,19 +12,16 @@ class CreateAccessDevicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('access_devices', function (Blueprint $table) {
-            $table->increments('id');
+        $this->createSchema(function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('kind', 16)->index();
+            $table->string('model', 64)->index();
+            $table->string('platform', 64)->index();
+            $table->string('platform_version', 16)->index();
+            $table->boolean('is_mobile');
+            $table->unique(['kind', 'model', 'platform', 'platform_version']);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::drop('access_devices');
-    }
 }

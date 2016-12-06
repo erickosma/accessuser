@@ -35,6 +35,6 @@ And run the above commented command
 
 ## License
 
-The EU Public License. Please see [license.md](license.md) for more information.
+MIT License  [license.md](LICENSE) for more information.
 
     

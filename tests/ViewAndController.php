@@ -19,7 +19,7 @@ class ViewAndController extends TestCasePackages
     {
         $fileSystem = new Filesystem;
         $config  = $fileSystem->getRequire($this->app->configPath()."/accessuser.php");
-        $this->assertArrayHasKey('connection',$config);
+        $this->assertArrayHasKey('database',$config);
         $this->assertArrayHasKey('route',$config);
     }
 
