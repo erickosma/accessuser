@@ -21,18 +21,28 @@ return [
      */
     'database' => [
         'connection' => 'sqlite',
-        'prefix'     => 'accessuser_'
+        'prefix' => 'accessuser_'
     ],
 
+    'user_model' => 'Zoy\Accessuser\Model\User',
+
+    /*
+     * Deffer booting for middleware use
+     * IF is  true . Add the Middleware to Laravel Kernel
+     * Open the file app/Http/Kernel.php and add the following to your web middlewares:
+     *  Zoy\Accessuser\Http\Middleware\AccessLog::class,
+     *
+     */
+    'use_middleware' => false,
 
     /* ------------------------------------------------------------------------------------------------
       |  Route settings
       | ------------------------------------------------------------------------------------------------
       */
-    'route'         => [
-        'enabled'    => true,
+    'route' => [
+        'enabled' => true,
         'attributes' => [
-            'prefix'     => 'accessuserlog',
+            'prefix' => 'accessuserlog',
             'middleware' => ['web'],
         ],
     ],

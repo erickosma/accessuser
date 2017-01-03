@@ -3,10 +3,10 @@
 use Illuminate\Database\Schema\Blueprint;
 use Zoy\Accessuser\Bases\MigrationAccess;
 
-class CreateAccessAgentsTable extends MigrationAccess
+class CreateAccessesTable extends MigrationAccess
 {
 
-    protected $table = 'access_agents';
+    protected $table = 'access';
 
     /**
      * Run the migrations.
@@ -17,13 +17,19 @@ class CreateAccessAgentsTable extends MigrationAccess
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('access_id')->index();
-            $table->string('name')->unique();
-            $table->string('browser')->index();
-            $table->string('browser_version');
+            $table->uuid('uuid')->unique();
+            $table->string('client_ip');
             $table->timestamps();
         });
     }
 
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        parent::down();
+    }
 }

@@ -7,7 +7,6 @@ use Illuminate\Filesystem\Filesystem;
 abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
 {
 
-
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
@@ -55,7 +54,7 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
         parent::setUp();
         //$this->resolveApplicationConsoleKernel($this->app);
         //$this->resolveApplicationHttpKernel($this->app);
-        //$this->getEnvironmentSetUp($this->app);
+        $this->getEnvironmentSetUp($this->app);
 
         $this->migrateUp();
     }
@@ -67,11 +66,8 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
      */
     public function migrateUp()
     {
-        $this->migrate('up');
-        /* $this->artisan('migrate', [
-             '--database' => 'testbench',
-             '--realpath' => realpath(__DIR__.'/../src/migrations'),
-         ]);*/
+        //$this->migrate('up');
+         $this->artisan('migrate');
     }
     public function migrateDown(){
         $this->migrate('down');
@@ -119,14 +115,14 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
         //$config = $fileSystem->getRequire($app->configPath()."/accessuser.php");
         // Setup default database to use sqlite :memory:
 
-        /*$app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
-        ]);*/
-        //$this->settingConfigs($app['config']);
-        //$this->settingRoutes($app['router']);
+        ]);
+        $this->settingConfigs($app['config']);
+        $this->settingRoutes($app['router']);
     }
 
     /**
@@ -180,7 +176,7 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
 
     protected function tearDown()
     {
-        $this->migrateDown();
+        $this->artisan('migrate:refresh');
         parent::tearDown();
     }
 }

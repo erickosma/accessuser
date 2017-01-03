@@ -16,10 +16,9 @@ class CreateAccessDomainsTable extends MigrationAccess
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('access_user_id')->index();
+            $table->bigInteger('access_id')->index();
             $table->string('url')->index();
             $table->string('host');
-            $table->string('search_terms_hash')->nullable();
             $table->string('search_terms_hash')->nullable();
             $table->timestamps();
         });

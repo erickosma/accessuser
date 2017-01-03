@@ -17,7 +17,7 @@ class CreateAccessRoutesTable extends MigrationAccess
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('access_user_id')->index();
+            $table->bigInteger('access_id')->index();
             $table->string('name')->index();
             $table->string('action');
             $table->string('path');

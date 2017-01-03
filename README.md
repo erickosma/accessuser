@@ -24,6 +24,12 @@ And run the above commented command
 ```php
     php artisan vendor:publish
 ```
+update
+```php
+php artisan vendor:publish --force
+```
+
+
 [//]: <> ( ## Changelog )
 [//]: <> (## )
 

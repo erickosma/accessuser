@@ -39,5 +39,7 @@
     "psr-4": {
       "Zoy\\Accessuser\\": "src"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

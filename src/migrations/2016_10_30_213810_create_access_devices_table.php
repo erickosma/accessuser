@@ -5,6 +5,8 @@ use Zoy\Accessuser\Bases\MigrationAccess;
 
 class CreateAccessDevicesTable extends MigrationAccess
 {
+
+    protected $table = 'access_devices';
     /**
      * Run the migrations.
      *

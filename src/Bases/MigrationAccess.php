@@ -144,7 +144,7 @@ abstract class MigrationAccess  extends Migration
     protected function createSchema(Closure $blueprint)
     {;
         if ($this->hasConnection()) {
-            Schema::connection($this->getConnection())
+             Schema::connection($this->getConnection())
                 ->create($this->getTableName(), $blueprint);
         }
         else {

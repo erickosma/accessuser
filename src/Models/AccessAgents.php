@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Access;
+namespace Zoy\Accessuser\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

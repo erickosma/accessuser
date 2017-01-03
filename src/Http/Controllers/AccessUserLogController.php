@@ -10,6 +10,7 @@ namespace Zoy\Accessuser\Http\Controllers;
 
 
 use Illuminate\Routing\Controller;
+use Zoy\Accessuser\Models\Access;
 
 class AccessUserLogController extends Controller
 {

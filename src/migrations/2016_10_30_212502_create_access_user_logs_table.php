@@ -17,7 +17,7 @@ class CreateAccessUserLogsTable extends MigrationAccess
      *
      * @var string
      */
-    protected $table = 'user_logs';
+    protected $table = 'access_user_logs';
 
     /**
      * Run the migrations.
@@ -28,12 +28,9 @@ class CreateAccessUserLogsTable extends MigrationAccess
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('access_id')->index();
             $table->integer('user_id')->index();
-            $table->uuid('uuid')->unique();
-            $table->string('client_ip');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
-            $table->unique(['user_id', 'client_ip']);
+            $table->timestamps();
         });
     }
 

@@ -17,7 +17,7 @@ class CreateAccessEventUsersTable extends MigrationAccess
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('access_user_id')->index();
+            $table->bigInteger('access_id')->index();
             $table->bigInteger('evento_id')->index();
             $table->timestamps();
         });
