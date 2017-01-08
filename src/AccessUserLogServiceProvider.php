@@ -3,10 +3,11 @@
 namespace Zoy\Accessuser;
 
 use Illuminate\Support\ServiceProvider;
+use Zoy\Accessuser\Bases\Config;
 use Zoy\Accessuser\Bases\Repository\AccessRepository;
 use Zoy\Accessuser\Bases\Tracker;
 use Zoy\Accessuser\Bases\Repository\TrackerManagerRepository;
-
+use Zoy\Accessuser\Bases\UserAgentParser;
 
 class AccessUserLogServiceProvider extends ServiceProvider
 {
@@ -47,8 +48,10 @@ class AccessUserLogServiceProvider extends ServiceProvider
     {
         if ($this->getConfig('enabled')) {
             $this->app->register(Providers\RouteServiceProvider::class);
+            $this->registerAgent();
             $this->registerRepositories();
             $this->registerTracker();
+
         }
 
     }
@@ -127,9 +130,24 @@ class AccessUserLogServiceProvider extends ServiceProvider
     {
        // $this->app->register(\Prettus\Repository\Providers\LumenRepositoryServiceProvider::class);
         $this->app['accessuser.repositories'] = $this->app->share(function ($app) {
-            return new TrackerManagerRepository(new AccessRepository($app));
+            $prefix = Config::getConfig('database.prefix',$app,'accessuser_');
+            $app['accessuser.prefix'] = $prefix;
+            $uaParser = new UserAgentParser();
+
+            return new TrackerManagerRepository($prefix,new AccessRepository($app,$prefix),$uaParser);
         });
     }
 
+    public function registerAgent(){
+        require __DIR__ . '/../vendor/autoload.php';
+        $this->app->register('Jenssegers\Agent\AgentServiceProvider');
+        /*
+         * Create aliases for the dependency.
+         * */
+
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('Agent', 'Jenssegers\Agent\Facades\Agent');
+
+    }
 
 }

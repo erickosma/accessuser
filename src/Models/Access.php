@@ -2,9 +2,12 @@
 
 namespace Zoy\Accessuser\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Access extends Model
+class Access extends AccessModel
 {
-    //
+    protected $fillable = ["id",
+        'uuid',
+        'client_ip'];
+
+
 }

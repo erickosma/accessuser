@@ -42,16 +42,21 @@ abstract class Repository implements RepositoryInterface
      */
     protected $preventCriteriaOverwriting = true;
 
+    protected $prefix;
+
+
+
     /**
      * @param App $app
-     * @param Collection $collection
-     * @throws \Bosnadev\Repositories\Exceptions\RepositoryException
+     * @internal param Collection $collection
      */
-    public function __construct(App $app)
+    public function __construct(App $app,$prefix)
     {
         $this->app = $app;
+        $this->prefix = $prefix;
         $this->resetScope();
         $this->makeModel();
+        $this->model->setTable($prefix);
     }
 
     /**
@@ -200,9 +205,10 @@ abstract class Repository implements RepositoryInterface
      * @param array $columns
      * @param bool $or
      *
+     * @param bool $first
      * @return \Illuminate\Database\Eloquent\Collection|null
      */
-    public function findWhere($where, $columns = ['*'], $or = false)
+    public function findWhere($where, $columns = ['*'], $or = false,$first=false)
     {
 
         $model = $this->model;
@@ -230,7 +236,8 @@ abstract class Repository implements RepositoryInterface
                     : $model->orWhere($field, '=', $value);
             }
         }
-        return $model->get($columns);
+
+        return ($first) ?  $model->first($columns)  : $model->get($columns);
     }
 
     /**
@@ -252,7 +259,6 @@ abstract class Repository implements RepositoryInterface
     public function setModel($eloquentModel)
     {
         $this->newModel = $this->app->make($eloquentModel);
-
         if (!$this->newModel instanceof Model)
             throw new Exception("Class {$this->newModel} must be an instance of Illuminate\\Database\\Eloquent\\Model");
 
@@ -279,5 +285,19 @@ abstract class Repository implements RepositoryInterface
     }
 
 
+    /**
+     * @param mixed $prefix
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
 }

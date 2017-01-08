@@ -9,6 +9,7 @@
 namespace Zoy\Accessuser\Bases\Repository;
 
 
+use Illuminate\Support\Facades\DB;
 use Zoy\Accessuser\Bases\Repository\Eloquent\Repository;
 
 
@@ -24,10 +25,22 @@ abstract  class BaseRepository extends Repository
         return null;
     }
 
-    public function findOrCriate($data){
-        dd($data);
-       // dd($this->findWhere($data,['id']));
-        // dd($model);
+    /**
+     * Find or create acess
+     *
+     * @param $data
+     * @return mixed
+     */
+    public function findOrCreate($data,array $attr){
+        $collectData  = $this->findWhere($data,$attr);
+        if($collectData->isEmpty()){
+             $model =  $this->create($data);
+        }
+        else{
+            $model = $collectData->first();
+            $model->touch();
+        }
+        return $model;
     }
 
 }

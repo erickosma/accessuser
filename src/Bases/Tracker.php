@@ -38,6 +38,15 @@ class Tracker
     protected $trackerManagerRepository;
 
 
+    /**
+     * Tracker constructor.
+     * @param Repository $config
+     * @param TrackerManagerRepository $reposTracker
+     * @param Request $request
+     * @param Router $route
+     * @param Logger $logger
+     * @param Laravel $laravel
+     */
     public function __construct(
         Repository $config,
         TrackerManagerRepository $reposTracker,
@@ -56,6 +65,9 @@ class Tracker
     }
 
 
+    /**
+     * Start track
+     */
     public function boot()
     {
         if ($this->isTrackable()) {
@@ -71,6 +83,9 @@ class Tracker
         return $this->getConfig('enabled',false) && !$this->isCommandLineInterface();
     }
 
+    /**
+     * @return bool
+     */
     protected function isCommandLineInterface()
     {
         return (php_sapi_name() === 'cli');
@@ -79,23 +94,38 @@ class Tracker
     public function track()
     {
         $this->configureTrackeRepository();
-        $this->trackerManagerRepository->createAcess();
+        $this->trackerManagerRepository->createAccess();
+        $this->trackerManagerRepository->createAgent();
+        $this->trackerManagerRepository->createDevice();
     }
 
 
+    /**
+     * Configuration startup access
+     */
     protected function configureTrackeRepository(){
         $this->trackerManagerRepository->setSession($this->laravel['auth']->guard());
-        $dataAcess=  $this->meckeAcessUser();
+        $dataAcess=  $this->maceAccessUser();
         $this->trackerManagerRepository->setArrayAcess($dataAcess);
     }
 
 
-    protected function meckeAcessUser(){
+    /**
+     * @return array
+     */
+    protected function maceAccessUser(){
         return [
             'client_ip' => $this->request->getClientIp(),
             'uuid' => $this->getUuid()
         ];
     }
+
+    /**
+     * Create or get Uuid
+     * Geat from cookie
+     *
+     * @return array|string
+     */
     protected function getUuid()
     {
         $cookie = !empty($this->laravel['cookie'])  ? $this->laravel['cookie'] : null;

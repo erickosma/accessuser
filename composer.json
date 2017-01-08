@@ -11,7 +11,7 @@
     "php": ">=5.6.4",
     "illuminate/support": "5.2.*",
     "jaybizzle/crawler-detect": "~1.0",
-    "jenssegers/agent": "~2.0",
+    "jenssegers/agent": "^2.4",
     "ramsey/uuid": "~3.0",
     "snowplow/referer-parser": "~0.2",
     "ua-parser/uap-php": "~3.0"
@@ -29,7 +29,8 @@
   "autoload": {
     "psr-4": {
       "App\\": "app/",
-      "Zoy\\Accessuser\\": "src"
+      "Zoy\\Accessuser\\": "src",
+      "Jenssegers\\Agent\\" : "vendor/jenssegers/agent/src/"
     }
   },
   "autoload-dev": {
@@ -37,7 +38,8 @@
       "tests/TestCasePackages.php"
     ],
     "psr-4": {
-      "Zoy\\Accessuser\\": "src"
+      "Zoy\\Accessuser\\": "src",
+      "Jenssegers\\Agent\\" : "vendor/jenssegers/agent/src/"
     }
   },
   "minimum-stability": "dev",

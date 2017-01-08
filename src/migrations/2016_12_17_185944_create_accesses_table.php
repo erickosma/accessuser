@@ -6,7 +6,7 @@ use Zoy\Accessuser\Bases\MigrationAccess;
 class CreateAccessesTable extends MigrationAccess
 {
 
-    protected $table = 'access';
+    protected $table = 'accesses';
 
     /**
      * Run the migrations.
