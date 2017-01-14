@@ -1,10 +1,16 @@
 {
   "name": "zoy/accessuser",
+  "type": "library",
   "description": "Storage User access",
+  "keywords": ["log","access"],
+  "homepage": "https://github.com/erickosma/accessuser",
+  "license": "MIT",
   "authors": [
     {
       "name": "Erick Giorgio",
-      "email": "erick@nuvem.com"
+      "email": "erick@nuvem.com",
+      "homepage": "http://vamuai.com",
+      "role": "Developer"
     }
   ],
   "require": {
