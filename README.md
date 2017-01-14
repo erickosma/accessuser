@@ -1,8 +1,7 @@
 # Access User Log
-[//]: <> ([![Latest Version on Packagist][ico-version]][link-packagist]
-[![Total Downloads][ico-downloads]][link-downloads]
-[![Software License][ico-license]](license.md)
 
+[![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/tracker.svg?style=flat-square)](https://packagist.org/packages/pragmarx/tracker) 
+[![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE)
 
 This package provides tool to track user access
 
@@ -17,13 +16,18 @@ $ composer require zoy/accessuser
 Then add the service provider in `config/app.php`:
 
 ```php
-    Zoy\Accessuser\AccessUserLogServiceProvider::class,
+Zoy\Accessuser\AccessUserLogServiceProvider::class,
 ```
 
 And run the above commented command  
 ```php
-    php artisan vendor:publish
+php artisan vendor:publish
 ```
+Migrate table to database 
+```php
+php artisan migrate
+```
+
 update
 ```php
 php artisan vendor:publish --force
