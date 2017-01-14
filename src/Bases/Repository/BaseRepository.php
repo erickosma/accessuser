@@ -29,9 +29,10 @@ abstract  class BaseRepository extends Repository
      * Find or create acess
      *
      * @param $data
+     * @param array $attr
      * @return mixed
      */
-    public function findOrCreate($data,array $attr){
+    public function findOrCreate($data,array $attr= ['*']){
         $collectData  = $this->findWhere($data,$attr);
         if($collectData->isEmpty()){
              $model =  $this->create($data);

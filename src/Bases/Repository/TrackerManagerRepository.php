@@ -13,6 +13,8 @@ use Zoy\Accessuser\Bases\Repository\Contracts\RepositoryInterface;
 use Zoy\Accessuser\Bases\UserAgentParser;
 use Zoy\Accessuser\Models\AccessAgents;
 use Zoy\Accessuser\Models\AccessDevices;
+use Zoy\Accessuser\Models\AccessDomains;
+use Zoy\Accessuser\Models\AccessRoutes;
 
 class TrackerManagerRepository
 {
@@ -35,10 +37,17 @@ class TrackerManagerRepository
 
     protected $prefix;
 
+    protected $dataDomain;
+
+    protected $dataRoute;
+
+
+
     /**
      * TrackerManagerRepository constructor.
+     * @param $prefix
      * @param AccessRepository|RepositoryInterface $accessRepository
-     * @param $userAgentParser
+     * @param UserAgentParser $userAgentParser
      */
     public function __construct(
         $prefix,
@@ -64,10 +73,15 @@ class TrackerManagerRepository
      * Save in DB
      *
      * return TYPE_NAME $modelAcess
+     * @param array $data
+     * @return mixed
      */
-    public function createAccess()
+    public function createAccess(array $data =[])
     {
-        $modelAccess = $this->accessRepository->findOrCreate($this->getDataAcess(), ['id', 'uuid', 'client_ip']);
+        if(empty($data)){
+            $data = $this->getDataAcess();
+        }
+        $modelAccess = $this->accessRepository->findOrCreate($data, ['id', 'uuid', 'client_ip']);
         $this->accessId = $modelAccess->id;
         return $modelAccess;
     }
@@ -93,14 +107,46 @@ class TrackerManagerRepository
      */
     public function createDevice()
     {
-        /* set  Zoy\Accessuser\Models\AccessAgents */
+        /* set  Zoy\Accessuser\Models\AccessDevice */
         $this->modelDevice();
         if (empty($this->userAgentParser->device)) {
             $this->userAgentParser->boot();
         }
-dd($this->getDeviceArray());
-        $attr = ['access_id', 'name', 'browser', 'browser_version'];
+        $attr = ["access_id", "kind", "model" ,  "platform" , "platform_version" , "is_mobile" , "is_robot" ];
         return $this->accessRepository->findOrCreate($this->getDeviceArray(), $attr);
+    }
+
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function createDomain(array $data =[])
+    {
+        /* set  Zoy\Accessuser\Models\AccessDomain */
+        $this->modelDomain();
+        if(empty($data)){
+            $data = $this->getDataDomain();
+        }
+        $attr = ["access_id", "url", "host" ,  "search_terms_hash"];
+        return $this->accessRepository->create($data, $attr);
+    }
+
+
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function createRoute(array $data =[])
+    {
+        /* set  Zoy\Accessuser\Models\AccessDomain */
+        $this->modelRoute();
+        if(empty($data)){
+            $data = $this->getDataRoute();
+        }
+        $attr = ["access_id", "controller", "action" ,  "name",  "path"];
+        return $this->accessRepository->create($data, $attr);
     }
 
     /**
@@ -133,6 +179,22 @@ dd($this->getDeviceArray());
     public function modelDevice()
     {
         $this->setModel(AccessDevices::class);
+    }
+
+    /**
+     * Sete model agent
+     */
+    public function modelDomain()
+    {
+        $this->setModel(AccessDomains::class);
+    }
+
+    /**
+     * Sete model agent
+     */
+    public function modelRoute()
+    {
+        $this->setModel(AccessRoutes::class);
     }
 
     /**
@@ -195,5 +257,38 @@ dd($this->getDeviceArray());
         return array_merge(['access_id' => $this->getAccessId()],
             $this->userAgentParser->device->detectDevice());
 
+    }
+    /**
+     * @return mixed
+     */
+    public function getDataDomain()
+    {
+        return array_merge( ['access_id' => $this->getAccessId()],
+            $this->dataDomain);
+    }
+
+    /**
+     * @param mixed $dataDomain
+     */
+    public function setDataDomain($dataDomain)
+    {
+        $this->dataDomain = $dataDomain;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDataRoute()
+    {
+        return array_merge( ['access_id' => $this->getAccessId()],
+            $this->dataRoute);
+    }
+
+    /**
+     * @param mixed $dataRoute
+     */
+    public function setDataRoute($dataRoute)
+    {
+        $this->dataRoute = $dataRoute;
     }
 }

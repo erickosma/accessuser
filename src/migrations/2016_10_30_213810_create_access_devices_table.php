@@ -16,13 +16,14 @@ class CreateAccessDevicesTable extends MigrationAccess
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('access_id')->index();
             $table->string('kind', 16)->index();
             $table->string('model', 64)->index();
             $table->string('platform', 64)->index();
             $table->string('platform_version', 16);
             $table->boolean('is_mobile');
             $table->boolean('is_robot');
-            $table->unique(['kind', 'model', 'platform', 'platform_version']);
+            $table->unique(['access_id','kind', 'model', 'platform', 'platform_version']);
             $table->timestamps();
         });
     }

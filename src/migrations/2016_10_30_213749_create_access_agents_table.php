@@ -18,7 +18,7 @@ class CreateAccessAgentsTable extends MigrationAccess
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('access_id')->index();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('browser')->index();
             $table->string('browser_version');
             $table->timestamps();

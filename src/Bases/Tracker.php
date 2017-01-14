@@ -13,7 +13,12 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Application as Laravel;
 use Illuminate\Http\Request;
 use Illuminate\Log\Writer as Logger;
+use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use League\Flysystem\Exception;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Zoy\Accessuser\Bases\Repository\TrackerManagerRepository;
 use Illuminate\Cookie\CookieJar;
 use Ramsey\Uuid\Uuid as UUID;
@@ -91,12 +96,28 @@ class Tracker
         return (php_sapi_name() === 'cli');
     }
 
+    /**
+     * Create acess
+     *
+     */
     public function track()
     {
         $this->configureTrackeRepository();
         $this->trackerManagerRepository->createAccess();
         $this->trackerManagerRepository->createAgent();
         $this->trackerManagerRepository->createDevice();
+        $this->trackerManagerRepository->createDomain();
+    }
+
+    /**
+     * Create acess route whem shut down
+     *
+     */
+    public function trackShutDown()
+    {
+        $dataRoute =  $this->getDataRoute();
+        $this->trackerManagerRepository->setDataRoute($dataRoute);
+        $this->trackerManagerRepository->createRoute();
     }
 
 
@@ -105,18 +126,32 @@ class Tracker
      */
     protected function configureTrackeRepository(){
         $this->trackerManagerRepository->setSession($this->laravel['auth']->guard());
-        $dataAcess=  $this->maceAccessUser();
+        $dataAcess=  $this->getDataAccessUser();
+        $dataDomain = $this->getDataDomain();
         $this->trackerManagerRepository->setArrayAcess($dataAcess);
+        $this->trackerManagerRepository->setDataDomain($dataDomain);
     }
 
 
     /**
      * @return array
      */
-    protected function maceAccessUser(){
+    protected function getDataAccessUser(){
         return [
             'client_ip' => $this->request->getClientIp(),
             'uuid' => $this->getUuid()
+        ];
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getDataDomain(){
+        return [
+            'url' => $this->request->url(),
+            'host' => $this->request->getHost(),
+            'search_terms_hash' =>   $this->request->getQueryString()
         ];
     }
 
@@ -138,7 +173,40 @@ class Tracker
     }
 
 
+    /**
+     * @return array
+     */
+    protected function getDataRoute(){
+        $this->route = $this->request->route();
 
+        try{
+            if(empty($this->route)){
+                throw new Exception("Route is null NotFoundHttpException ");
+            }
+            $action = $this->route->getAction();
+            $controller = (isset($action['controller'])) ? class_basename($action['controller']) : "IndexController@index";
+            list($controller, $action) = explode('@', $controller);
+            $name = $this->route->getName();
+            $path = $this->route->getPath();
+            $uri = $this->route->getUri();
+            $pathOrUri = empty($path) ? $uri : $path;
+            return [
+                'controller' =>  $controller,
+                'action' => $action,
+                'name' => $name,
+                'path' => $pathOrUri,
+            ];
+        }catch (Exception $ex){
+            Log::error($ex->getMessage());
+
+            return [
+                'controller' =>  "ErrorController",
+                'action' => 'index',
+                'name' => 'error',
+                'path' => $ex->getMessage(),
+            ];
+        }
+    }
 
 
     /**
@@ -153,4 +221,5 @@ class Tracker
     {
         return  $this->config->get("accessuser.$key", $default);
     }
+
 }

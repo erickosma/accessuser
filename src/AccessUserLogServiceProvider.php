@@ -51,9 +51,8 @@ class AccessUserLogServiceProvider extends ServiceProvider
             $this->registerAgent();
             $this->registerRepositories();
             $this->registerTracker();
-
+            $this->registerMiddleware();
         }
-
     }
 
 
@@ -133,7 +132,6 @@ class AccessUserLogServiceProvider extends ServiceProvider
             $prefix = Config::getConfig('database.prefix',$app,'accessuser_');
             $app['accessuser.prefix'] = $prefix;
             $uaParser = new UserAgentParser();
-
             return new TrackerManagerRepository($prefix,new AccessRepository($app,$prefix),$uaParser);
         });
     }
@@ -150,4 +148,9 @@ class AccessUserLogServiceProvider extends ServiceProvider
 
     }
 
+    public function registerMiddleware(){
+        //regostre middleware
+        $kernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
+        $kernel->pushMiddleware('Zoy\Accessuser\Http\Middleware\Terminate');
+    }
 }

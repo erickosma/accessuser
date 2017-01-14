@@ -29,4 +29,5 @@ class AccessLog
         }
         return $next($request);
     }
+
 }
