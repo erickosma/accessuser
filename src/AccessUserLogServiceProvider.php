@@ -137,7 +137,7 @@ class AccessUserLogServiceProvider extends ServiceProvider
     }
 
     public function registerAgent(){
-        require __DIR__ . '/../vendor/autoload.php';
+        //require __DIR__ . '/../vendor/autoload.php';
         $this->app->register('Jenssegers\Agent\AgentServiceProvider');
         /*
          * Create aliases for the dependency.

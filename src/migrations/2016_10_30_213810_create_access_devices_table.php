@@ -23,7 +23,7 @@ class CreateAccessDevicesTable extends MigrationAccess
             $table->string('platform_version', 16);
             $table->boolean('is_mobile');
             $table->boolean('is_robot');
-            $table->unique(['access_id','kind', 'model', 'platform', 'platform_version']);
+            $table->unique(['access_id','kind', 'model', 'platform']);
             $table->timestamps();
         });
     }
