@@ -15,6 +15,8 @@ use Zoy\Accessuser\Models\AccessAgents;
 use Zoy\Accessuser\Models\AccessDevices;
 use Zoy\Accessuser\Models\AccessDomains;
 use Zoy\Accessuser\Models\AccessRoutes;
+use Illuminate\Auth\SessionGuard;
+use Zoy\Accessuser\Models\AccessUserLog;
 
 class TrackerManagerRepository
 {
@@ -41,6 +43,7 @@ class TrackerManagerRepository
 
     protected $dataRoute;
 
+    private $session;
 
 
     /**
@@ -60,13 +63,22 @@ class TrackerManagerRepository
     }
 
     /**
-     * @param $session
+     * @param SessionGuard|IlluminateSession $session
+     * @internal param $IlluminateSession
      */
-    public function setSession($session)
+    public function setSession(SessionGuard $session)
     {
-        $this->accessRepository->setSession($session);
+        $this->session = $session;
     }
 
+
+    /**
+     * @return \lluminate\Auth\SessionGuard
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
 
     /**
      * Create access
@@ -85,6 +97,9 @@ class TrackerManagerRepository
         $this->accessId = $modelAccess->id;
         return $modelAccess;
     }
+
+
+
 
     /**
      *
@@ -150,6 +165,24 @@ class TrackerManagerRepository
     }
 
     /**
+     *
+     *
+     * @return bool|mixed
+     */
+    public function createUser()
+    {
+        if(!$this->session->guest() && !empty($this->session->id())){
+            $this->modelAgentsUser();
+
+            $data = $this->getDataUser();
+            $modelAccess = $this->accessRepository->findOrCreate($data, ['access_id', 'user_id']);
+            $this->accessId = $modelAccess->id;
+            return $modelAccess;
+        }
+        return false;
+    }
+
+    /**
      * @return mixed
      */
     public function getDataAcess()
@@ -173,6 +206,14 @@ class TrackerManagerRepository
         $this->setModel(AccessAgents::class);
     }
 
+
+    /**
+     * Sete model agent
+     */
+    public function modelAgentsUser()
+    {
+        $this->setModel(AccessUserLog::class);
+    }
     /**
      * Sete model agent
      */
@@ -282,6 +323,17 @@ class TrackerManagerRepository
     {
         return array_merge( ['access_id' => $this->getAccessId()],
             $this->dataRoute);
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getDataUser()
+    {
+
+        return ['access_id' => $this->getAccessId(),
+             'user_id' => $this->session->id()];
     }
 
     /**

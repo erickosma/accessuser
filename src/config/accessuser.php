@@ -24,8 +24,6 @@ return [
         'prefix' => 'accessuser_'
     ],
 
-    'user_model' => 'Zoy\Accessuser\Model\User',
-
     /*
      * Deffer booting for middleware use
      * IF is  true . Add the Middleware to Laravel Kernel

@@ -107,6 +107,8 @@ class Tracker
         $this->trackerManagerRepository->createAgent();
         $this->trackerManagerRepository->createDevice();
         $this->trackerManagerRepository->createDomain();
+
+
     }
 
     /**
@@ -118,6 +120,7 @@ class Tracker
         $dataRoute =  $this->getDataRoute();
         $this->trackerManagerRepository->setDataRoute($dataRoute);
         $this->trackerManagerRepository->createRoute();
+        $this->trackerManagerRepository->createUser();
     }
 
 
@@ -125,6 +128,7 @@ class Tracker
      * Configuration startup access
      */
     protected function configureTrackeRepository(){
+        //dd(auth()->user());
         $this->trackerManagerRepository->setSession($this->laravel['auth']->guard());
         $dataAcess=  $this->getDataAccessUser();
         $dataDomain = $this->getDataDomain();
