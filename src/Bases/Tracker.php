@@ -27,7 +27,7 @@ use Ramsey\Uuid\Uuid as UUID;
 class Tracker
 {
 
-    private $cookieName ="cookie_access_user";
+    private $cookieName = "cookie_access_user";
     /**
      * @var \Illuminate\Routing\Router
      */
@@ -85,7 +85,7 @@ class Tracker
      */
     protected function isTrackable()
     {
-        return $this->getConfig('enabled',false) && !$this->isCommandLineInterface();
+        return $this->getConfig('enabled', false) && !$this->isCommandLineInterface();
     }
 
     /**
@@ -102,13 +102,15 @@ class Tracker
      */
     public function track()
     {
-        $this->configureTrackeRepository();
-        $this->trackerManagerRepository->createAccess();
-        $this->trackerManagerRepository->createAgent();
-        $this->trackerManagerRepository->createDevice();
-        $this->trackerManagerRepository->createDomain();
-
-
+        try {
+            $this->configureTrackeRepository();
+            $this->trackerManagerRepository->createAccess();
+            $this->trackerManagerRepository->createAgent();
+            $this->trackerManagerRepository->createDevice();
+            $this->trackerManagerRepository->createDomain();
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
     }
 
     /**
@@ -117,20 +119,32 @@ class Tracker
      */
     public function trackShutDown()
     {
-        $dataRoute =  $this->getDataRoute();
-        $this->trackerManagerRepository->setDataRoute($dataRoute);
-        $this->trackerManagerRepository->createRoute();
-        $this->trackerManagerRepository->createUser();
+        try{
+            if($this->trackerManagerRepository->getCheckConfig() == true){
+                $this->trackerManagerRepository->createUser();
+                $dataRoute = $this->getDataRoute();
+                $this->trackerManagerRepository->setDataRoute($dataRoute);
+                $this->trackerManagerRepository->createRoute();
+            }
+        }catch (Exception $exception) {
+            Log::error($exception);
+        }
+
     }
 
 
     /**
      * Configuration startup access
      */
-    protected function configureTrackeRepository(){
+    protected function configureTrackeRepository()
+    {
+        $this->trackerManagerRepository->checkTableExist();
+        if($this->trackerManagerRepository->getCheckConfig() == false){
+             throw new Exception("Table accesses not exist .Run migrate command");
+        }
         //dd(auth()->user());
         $this->trackerManagerRepository->setSession($this->laravel['auth']->guard());
-        $dataAcess=  $this->getDataAccessUser();
+        $dataAcess = $this->getDataAccessUser();
         $dataDomain = $this->getDataDomain();
         $this->trackerManagerRepository->setArrayAcess($dataAcess);
         $this->trackerManagerRepository->setDataDomain($dataDomain);
@@ -140,7 +154,8 @@ class Tracker
     /**
      * @return array
      */
-    protected function getDataAccessUser(){
+    protected function getDataAccessUser()
+    {
         return [
             'client_ip' => $this->request->getClientIp(),
             'uuid' => $this->getUuid()
@@ -151,11 +166,12 @@ class Tracker
     /**
      * @return array
      */
-    protected function getDataDomain(){
+    protected function getDataDomain()
+    {
         return [
             'url' => $this->request->url(),
             'host' => $this->request->getHost(),
-            'search_terms_hash' =>   $this->request->getQueryString()
+            'search_terms_hash' => $this->request->getQueryString()
         ];
     }
 
@@ -167,11 +183,11 @@ class Tracker
      */
     protected function getUuid()
     {
-        $cookie = !empty($this->laravel['cookie'])  ? $this->laravel['cookie'] : null;
+        $cookie = !empty($this->laravel['cookie']) ? $this->laravel['cookie'] : null;
         $uuid = $this->request->cookie($this->cookieName);
-        if ($cookie && empty($uuid)){
-            $uuid = (string) UUID::uuid4();
-            $cookie->queue($this->cookieName, $uuid,10000);
+        if ($cookie && empty($uuid)) {
+            $uuid = (string)UUID::uuid4();
+            $cookie->queue($this->cookieName, $uuid, 10000);
         }
         return $uuid;
     }
@@ -180,11 +196,12 @@ class Tracker
     /**
      * @return array
      */
-    protected function getDataRoute(){
+    protected function getDataRoute()
+    {
         $this->route = $this->request->route();
-
-        try{
-            if(empty($this->route)){
+        $time  = microtime(true) - LARAVEL_START;
+        try {
+            if (empty($this->route)) {
                 throw new Exception("Route is null NotFoundHttpException ");
             }
             $action = $this->route->getAction();
@@ -194,20 +211,25 @@ class Tracker
             $path = $this->route->getPath();
             $uri = $this->route->getUri();
             $pathOrUri = empty($path) ? $uri : $path;
+            $isAjax =  $this->request->ajax();
             return [
-                'controller' =>  $controller,
+                'controller' => $controller,
                 'action' => $action,
                 'name' => $name,
                 'path' => $pathOrUri,
+                'is_ajax' => $isAjax,
+                'time' => $time
             ];
-        }catch (Exception $ex){
+        } catch (Exception $ex) {
             Log::error($ex->getMessage());
 
             return [
-                'controller' =>  "ErrorController",
+                'controller' => "ErrorController",
                 'action' => 'index',
                 'name' => 'error',
                 'path' => $ex->getMessage(),
+                'is_ajax' => false,
+                'time' => $time
             ];
         }
     }
@@ -216,14 +238,14 @@ class Tracker
     /**
      * Get the tracker config.
      *
-     * @param  string      $key
-     * @param  mixed|null  $default
+     * @param  string $key
+     * @param  mixed|null $default
      *
      * @return mixed
      */
     protected function getConfig($key, $default = null)
     {
-        return  $this->config->get("accessuser.$key", $default);
+        return $this->config->get("accessuser.$key", $default);
     }
 
 }

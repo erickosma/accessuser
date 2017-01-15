@@ -9,6 +9,7 @@
 namespace Zoy\Accessuser\Bases\Repository;
 
 
+use Illuminate\Support\Facades\Schema;
 use Zoy\Accessuser\Bases\Repository\Contracts\RepositoryInterface;
 use Zoy\Accessuser\Bases\UserAgentParser;
 use Zoy\Accessuser\Models\AccessAgents;
@@ -45,6 +46,9 @@ class TrackerManagerRepository
 
     private $session;
 
+    protected $checkConfig;
+
+
 
     /**
      * TrackerManagerRepository constructor.
@@ -60,6 +64,7 @@ class TrackerManagerRepository
         $this->prefix = $prefix;
         $this->accessRepository = $accessRepository;
         $this->userAgentParser = $userAgentParser;
+        $this->checkConfig = false;
     }
 
     /**
@@ -160,7 +165,7 @@ class TrackerManagerRepository
         if(empty($data)){
             $data = $this->getDataRoute();
         }
-        $attr = ["access_id", "controller", "action" ,  "name",  "path"];
+        $attr = ["access_id", "controller", "action" ,  "name",  "path","is_ajax","time"];
         return $this->accessRepository->create($data, $attr);
     }
 
@@ -342,5 +347,32 @@ class TrackerManagerRepository
     public function setDataRoute($dataRoute)
     {
         $this->dataRoute = $dataRoute;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getCheckConfig()
+    {
+        return $this->checkConfig;
+    }
+
+    /**
+     * @param mixed $checkConfig
+     */
+    public function setCheckConfig($checkConfig)
+    {
+        $this->checkConfig = $checkConfig;
+    }
+
+    public function checkTableExist(){
+        $table  = $this->prefix."accesses";
+        if(Schema::hasTable($table) == false){
+            $this->checkConfig =false;
+        }
+        else{
+            $this->checkConfig =true;
+        }
     }
 }

@@ -22,6 +22,8 @@ class CreateAccessRoutesTable extends MigrationAccess
             $table->string('action');
             $table->string('name')->nullable();
             $table->string('path')->nullable();
+            $table->boolean('is_ajax');
+            $table->string('time')->default(0);
             $table->timestamps();
         });
     }
