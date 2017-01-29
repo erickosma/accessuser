@@ -364,6 +364,7 @@
                                 this.$nextTick(function () {
                                     this.$broadcast('vuetable:refresh')
                                 });
+                                $(".sub-header").html(href);
                             }, function (error) {
                                console.dir(error)
                         });
