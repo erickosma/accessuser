@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
@@ -168,11 +168,13 @@
                 transform: scale(0.6);
             }
         }
+
         /* Loading Animation: */
         .vuetable-wrapper {
             position: relative;
             opacity: 1;
         }
+
         .loader {
             visibility: hidden;
             opacity: 0;
@@ -188,23 +190,27 @@
             top: 160px;
             left: 50%;
         }
+
         .loading .loader {
             visibility: visible;
             opacity: 1;
             z-index: 100;
         }
-        .loading .vuetable{
-            opacity:0.3;
+
+        .loading .vuetable {
+            opacity: 0.3;
             filter: alpha(opacity=30); /* IE8 and earlier */
         }
-         .active{
+
+        .active {
             font-weight: bold;
-             font-size: 110%;
-             color: #3071be;
+            font-size: 110%;
+            color: #3071be;
         }
-        .active{
+
+        .active {
             font-weight: bold;
-            font-size: 120%;
+            font-size: 110%;
         }
 
     </style>
@@ -212,69 +218,76 @@
 
 <body>
 
-<div id="app" class="container">
-    <div >
+<div id="app" class="row">
+    <div class="col">
+        <div class="row">
+            <!-- Nav tabs -->
+            <ul id="myTabs" class="col nav  nav-pills nav-fill" role="tablist">
+                <li role="presentation" class="nav-item">
+                    <a href="#Access" v-on:click="chageTable" class="nav-link active" aria-controls="Access" role="tab"
+                       data-toggle="tab">Access</a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a class="nav-link" href="#AccessAgents" v-on:click="chageTable" aria-controls="AccessAgents"
+                       role="tab" data-toggle="tab">Agents</a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a class="nav-link" href="#AccessDevices" v-on:click="chageTable" aria-controls="AccessDevices"
+                       role="tab" data-toggle="tab">Devices</a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a class="nav-link" href="#AccessDomains" v-on:click="chageTable" aria-controls="AccessDomains"
+                       role="tab" data-toggle="tab">Url</a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a class="nav-link" href="#AccessRoutes" v-on:click="chageTable" aria-controls="AccessRoutes"
+                       role="tab" data-toggle="tab">Route</a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a class="nav-link" href="#AccessUserLog" v-on:click="chageTable" aria-controls="AccessUserLog"
+                       role="tab" data-toggle="tab">User</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <!-- Example row of columns -->
+            <h2 class="col sub-header" id="title"> {!! $h1 !!}</h2>
+            <hr>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="form-inline form-group">
+                    <label>Search:</label>
+                    <input v-model="searchFor" class="form-control" @keyup.enter="setFilter">
+                    <button class="btn btn-primary" @click="setFilter">Go</button>
+                    <button class="btn btn-default" @click="resetFilter">Reset</button>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="dropdown form-inline pull-right">
+                    <label>Pagination:</label>
+                    <select class="form-control" v-model="perPage">
+                        <option value=10>10</option>
+                        <option value=15>15</option>
+                        <option value=20>20</option>
+                        <option value=25>25</option>
+                    </select>
 
-        <!-- Nav tabs -->
-        <ul id="myTabs" class="nav  nav-pills nav-fill" role="tablist">
-            <li role="presentation" class="nav-item">
-                <a href="#Access"  v-on:click="chageTable"  class="nav-link active"   aria-controls="Access" role="tab" data-toggle="tab">Access</a>
-            </li>
-            <li role="presentation" class="nav-item">
-                <a class="nav-link" href="#AccessAgents"  v-on:click="chageTable"  aria-controls="AccessAgents" role="tab" data-toggle="tab">Agents</a>
-            </li>
-            <li role="presentation" class="nav-item">
-                <a class="nav-link" href="#AccessDevices"   v-on:click="chageTable"  aria-controls="AccessDevices" role="tab" data-toggle="tab">Devices</a>
-            </li>
-            <li role="presentation" class="nav-item">
-                <a class="nav-link" href="#AccessDomains" v-on:click="chageTable"  aria-controls="AccessDomains" role="tab" data-toggle="tab">Url</a>
-            </li>
-            <li role="presentation" class="nav-item">
-                <a class="nav-link" href="#AccessRoutes" v-on:click="chageTable"  aria-controls="AccessRoutes" role="tab" data-toggle="tab">Route</a>
-            </li>
-            <li role="presentation" class="nav-item">
-                <a class="nav-link" href="#AccessUserLog" v-on:click="chageTable"  aria-controls="AccessUserLog" role="tab" data-toggle="tab">User</a>
-            </li>
-        </ul>
-
-
-    </div>
-    <!-- Example row of columns -->
-    <h2 class="sub-header" id="title"> {!! $h1 !!}</h2>
-    <hr>
-    <div class="row">
-        <div class="col-md-5">
-            <div class="form-inline form-group">
-                <label>Search:</label>
-                <input v-model="searchFor" class="form-control" @keyup.enter="setFilter">
-                <button class="btn btn-primary" @click="setFilter">Go</button>
-                <button class="btn btn-default" @click="resetFilter">Reset</button>
+                </div>
             </div>
         </div>
-        <div class="col-md-7">
-            <div class="dropdown form-inline pull-right">
-                <label>Pagination:</label>
-                <select class="form-control" v-model="perPage">
-                    <option value=10>10</option>
-                    <option value=15>15</option>
-                    <option value=20>20</option>
-                    <option value=25>25</option>
-                </select>
-
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12 col-sm-12  ui vertical stripe segment">
-            <div class="ui container">
-                <div id="content" class="ui basic segment">
-                    @include('accessuser::loading')
-                    <!--Your Loading Message -->
+        <div class="row">
+            <div class="col">
+                <div id="content" class="">
+                @include('accessuser::loading')
+                <!--Your Loading Message -->
                     <vuetable
                             :api-url="urlApi"
                             table-wrapper="#content"
                             :fields="columns"
                             :item-actions="itemActions"
                             pagination-path=""
-                            table-class="table table-bordered table-striped table-hover"
+                            table-class="table table-bordered table-striped table-hover "
                             ascending-icon="glyphicon glyphicon-chevron-up"
                             descending-icon="glyphicon glyphicon-chevron-down"
                             pagination-class=""
@@ -290,185 +303,182 @@
                             pagination-info-no-data-template="The requested query return no result"
                     ></vuetable>
                 </div>
+
             </div>
         </div>
     </div>
-
 </div>
-    <hr>
 
 
+<script type="text/javascript">
 
-    <script type="text/javascript">
-
-        // fields definition
-        var tableColumns = {!! $fields !!}
+    // fields definition
+    var tableColumns = {!! $fields !!}
 
         new Vue({
-            el: '#app',
-            data: {
-                urlApi:'/accessuserlog/show/',
-                urlApiColumns:'/accessuserlog/cols/',
-                searchFor: '',
-                columns: tableColumns,
-                sortOrder: {
-                    field: 'name',
-                    direction: 'asc'
-                },
-                perPage: 10,
-                paginationComponent: 'vuetable-pagination',
-                paginationInfoTemplate: 'แสดง {from} ถึง {to} จากทั้งหมด {total} รายการ',
-                itemActions: [
-                    { name: 'view-item', label: 'var', icon: 'glyphicon glyphicon-search', class: 'btn btn-primary' }
-                ],
-                moreParams: [
+        el: '#app',
+        data: {
+            urlApi: '/accessuserlog/show/',
+            urlApiColumns: '/accessuserlog/cols/',
+            searchFor: '',
+            columns: tableColumns,
+            sortOrder: {
+                field: 'name',
+                direction: 'asc'
+            },
+            perPage: 10,
+            paginationComponent: 'vuetable-pagination',
+            paginationInfoTemplate: 'แสดง {from} ถึง {to} จากทั้งหมด {total} รายการ',
+            itemActions: [
+                {name: 'view-item', label: 'var', icon: 'glyphicon glyphicon-search', class: 'btn btn-primary'}
+            ],
+            moreParams: []
+        },
+        watch: {
+            'perPage': function (val, oldVal) {
+                this.$broadcast('vuetable:refresh')
+            },
+            'paginationComponent': function (val, oldVal) {
+                this.$broadcast('vuetable:load-success', this.$refs.vuetable.tablePagination)
+                this.paginationConfig(this.paginationComponent)
+            }
+        },
+        methods: {
+            /**
+             * Other functions
+             */
+            setFilter: function () {
+                this.moreParams = [
+                    'filter=' + this.searchFor
                 ]
-            },
-            watch: {
-                'perPage': function (val, oldVal) {
+                this.$nextTick(function () {
                     this.$broadcast('vuetable:refresh')
-                },
-                'paginationComponent': function (val, oldVal) {
-                    this.$broadcast('vuetable:load-success', this.$refs.vuetable.tablePagination)
-                    this.paginationConfig(this.paginationComponent)
-                }
+                })
             },
-            methods: {
-                /**
-                 * Other functions
-                 */
-                setFilter: function () {
+            resetFilter: function () {
+                this.searchFor = ''
+                this.setFilter()
+            },
+            chageTable: function (ev) {
+                var tag = $(ev.target);
+                if (!tag.hasClass('active')) {
+                    $("#myTabs .active").removeClass("active");
+                    var href = tag.attr('href').replace('#', "");
+                    tag.toggleClass('active');
                     this.moreParams = [
-                        'filter=' + this.searchFor
-                    ]
-                    this.$nextTick(function () {
-                        this.$broadcast('vuetable:refresh')
-                    })
-                },
-                resetFilter: function () {
-                    this.searchFor = ''
-                    this.setFilter()
-                },
-                chageTable: function (ev) {
-                    var tag  = $(ev.target);
-                    if(!tag.hasClass('active')){
-                        $("#myTabs .active").removeClass("active");
-                        var href =  tag.attr('href').replace('#',"");
-                        tag.toggleClass('active');
-                        this.moreParams = [
-                            'table=' + href
-                        ];
-                        this.$http.get(this.urlApiColumns, {params:  {table: href}} ).then(
-                            function (response) {
-                                this.columns =  response.data;
-                                this.$nextTick(function () {
-                                    this.$broadcast('vuetable:refresh')
-                                });
-                                $(".sub-header").html(href);
-                            }, function (error) {
-                               console.dir(error)
+                        'table=' + href
+                    ];
+                    this.$http.get(this.urlApiColumns, {params: {table: href}}).then(
+                        function (response) {
+                            this.columns = response.data;
+                            this.$nextTick(function () {
+                                this.$broadcast('vuetable:refresh')
+                            });
+                            $(".sub-header").html(href);
+                        }, function (error) {
+                            console.dir(error)
                         });
 
-                     }
-                },
+                }
+            },
 
-                changePaginationComponent: function () {
-                    this.$broadcast('vuetable:load-success', this.$refs.vuetable.tablePagination)
-                },
-                preg_quote: function (str) {
-                    // http://kevin.vanzonneveld.net
-                    // +   original by: booeyOH
-                    // +   improved by: Ates Goral (http://magnetiq.com)
-                    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-                    // +   bugfixed by: Onno Marsman
-                    // *     example 1: preg_quote("$40");
-                    // *     returns 1: '\$40'
-                    // *     example 2: preg_quote("*RRRING* Hello?");
-                    // *     returns 2: '\*RRRING\* Hello\?'
-                    // *     example 3: preg_quote("\\.+*?[^]$(){}=!<>|:");
-                    // *     returns 3: '\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:'
+            changePaginationComponent: function () {
+                this.$broadcast('vuetable:load-success', this.$refs.vuetable.tablePagination)
+            },
+            preg_quote: function (str) {
+                // http://kevin.vanzonneveld.net
+                // +   original by: booeyOH
+                // +   improved by: Ates Goral (http://magnetiq.com)
+                // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+                // +   bugfixed by: Onno Marsman
+                // *     example 1: preg_quote("$40");
+                // *     returns 1: '\$40'
+                // *     example 2: preg_quote("*RRRING* Hello?");
+                // *     returns 2: '\*RRRING\* Hello\?'
+                // *     example 3: preg_quote("\\.+*?[^]$(){}=!<>|:");
+                // *     returns 3: '\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:'
 
-                    return (str + '').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
-                },
-                highlight: function (needle, haystack) {
-                    return haystack.replace(
-                        new RegExp('(' + this.preg_quote(needle) + ')', 'ig'),
-                        '<span class="highlight">$1</span>'
-                    )
-                },
-                paginationConfig: function (componentName) {
-                    console.log('paginationConfig: ', componentName)
-                    if (componentName == 'vuetable-pagination') {
-                        this.$broadcast('vuetable-pagination:set-options', {
-                            wrapperClass: 'pagination',
-                            icons: {
-                                first: '',
-                                prev: '',
-                                next: '',
-                                last: ''},
-                            activeClass: 'active',
-                            linkClass: 'btn btn-default',
-                            pageClass: 'btn btn-default'
-                        })
-                    }
-                    if (componentName == 'vuetable-pagination-dropdown') {
-                        this.$broadcast('vuetable-pagination:set-options', {
-                            wrapperClass: 'form-inline',
-                            icons: {
-                                prev: 'glyphicon glyphicon-chevron-left',
-                                next: 'glyphicon glyphicon-chevron-right'
-                            },
-                            dropdownClass: 'form-control'
-                        })
+                return (str + '').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
+            },
+            highlight: function (needle, haystack) {
+                return haystack.replace(
+                    new RegExp('(' + this.preg_quote(needle) + ')', 'ig'),
+                    '<span class="highlight">$1</span>'
+                )
+            },
+            paginationConfig: function (componentName) {
+                console.log('paginationConfig: ', componentName)
+                if (componentName == 'vuetable-pagination') {
+                    this.$broadcast('vuetable-pagination:set-options', {
+                        wrapperClass: 'pagination',
+                        icons: {
+                            first: '',
+                            prev: '',
+                            next: '',
+                            last: ''
+                        },
+                        activeClass: 'active',
+                        linkClass: 'btn btn-default',
+                        pageClass: 'btn btn-default'
+                    })
+                }
+                if (componentName == 'vuetable-pagination-dropdown') {
+                    this.$broadcast('vuetable-pagination:set-options', {
+                        wrapperClass: 'form-inline',
+                        icons: {
+                            prev: 'glyphicon glyphicon-chevron-left',
+                            next: 'glyphicon glyphicon-chevron-right'
+                        },
+                        dropdownClass: 'form-control'
+                    })
+                }
+            }
+        },
+        events: {
+            'vuetable:action': function (action, data) {
+                console.log('vuetable:action', action, data)
+
+                if (action == 'view-item') {
+                    console.log(action, data.name)
+                } else if (action == 'edit-item') {
+                    sweetAlert(action, data.name)
+                } else if (action == 'delete-item') {
+                    sweetAlert(action, data.name)
+                }
+            },
+            'vuetable:cell-dblclicked': function (item, field, event) {
+                var self = this
+                console.log('cell-dblclicked: old value =', item[field.name])
+            },
+            'vuetable:load-success': function (response) {
+                console.log('total = ', response.data.total)
+                var data = response.data.data
+                if (this.searchFor !== '') {
+                    for (n in data) {
+                        data[n].name = this.highlight(this.searchFor, data[n].name)
+                        data[n].email = this.highlight(this.searchFor, data[n].email)
                     }
                 }
             },
-            events: {
-                'vuetable:action': function (action, data) {
-                    console.log('vuetable:action', action, data)
-
-                    if (action == 'view-item') {
-                        console.log(action, data.name)
-                    } else if (action == 'edit-item') {
-                        sweetAlert(action, data.name)
-                    } else if (action == 'delete-item') {
-                        sweetAlert(action, data.name)
-                    }
-                },
-                'vuetable:cell-dblclicked': function (item, field, event) {
-                    var self = this
-                    console.log('cell-dblclicked: old value =', item[field.name])
-                },
-                'vuetable:load-success': function (response) {
-                    console.log('total = ', response.data.total)
-                    var data = response.data.data
-                    if (this.searchFor !== '') {
-                        for (n in data) {
-                            data[n].name = this.highlight(this.searchFor, data[n].name)
-                            data[n].email = this.highlight(this.searchFor, data[n].email)
-                        }
-                    }
-                },
-                'vuetable:load-error': function (response) {
-                    if (response.status == 400) {
-                        sweetAlert('Something\'s Wrong!', response.data.message, 'error')
-                    } else {
-                        sweetAlert('Oops', E_SERVER_ERROR, 'error')
-                    }
+            'vuetable:load-error': function (response) {
+                if (response.status == 400) {
+                    sweetAlert('Something\'s Wrong!', response.data.message, 'error')
+                } else {
+                    sweetAlert('Oops', E_SERVER_ERROR, 'error')
                 }
             }
+        }
 
 
-        });
+    });
 
-        $( document ).ready(function() {
-            /*$('#myTabs a').click(function (e) {
-                e.preventDefault()
+    $(document).ready(function () {
+        /*$('#myTabs a').click(function (e) {
+         e.preventDefault()
 
-            })*/
-        });
-    </script>
-
+         })*/
+    });
+</script>
 
 
 </body>
