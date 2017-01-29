@@ -70,7 +70,8 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
          $this->artisan('migrate');
     }
     public function migrateDown(){
-        $this->migrate('down');
+        $this->artisan('migrate:reset');
+        //$this->migrate('down');
     }
 
     private function migrate($calMethod)
@@ -174,9 +175,27 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
         $app->singleton('Illuminate\Contracts\Console\Kernel', 'Acme\Testbench\Console\Kernel');
     }
 
+
+    public function mock($class)
+    {
+        $mock = Mockery::mock($class);
+
+        $this->app->instance($class, $mock);
+
+        return $mock;
+    }
+
     protected function tearDown()
     {
-        $this->artisan('migrate:refresh');
+        $this->migrateDown();
+        Mockery::close();
         parent::tearDown();
+    }
+
+    public function getApp(){
+        if(!empty($this->app['accessuser'])){
+            return $this->app['accessuser'];
+        }
+        app('accessuser');
     }
 }

@@ -17,7 +17,7 @@ class CreateAccessesTable extends MigrationAccess
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid('uuid')->unique();
+            $table->string('uuid')->unique();
             $table->string('client_ip');
             $table->timestamps();
         });

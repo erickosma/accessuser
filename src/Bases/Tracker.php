@@ -13,14 +13,10 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Application as Laravel;
 use Illuminate\Http\Request;
 use Illuminate\Log\Writer as Logger;
-use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use League\Flysystem\Exception;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Zoy\Accessuser\Bases\Repository\TrackerManagerRepository;
-use Illuminate\Cookie\CookieJar;
 use Ramsey\Uuid\Uuid as UUID;
 
 
@@ -108,8 +104,10 @@ class Tracker
             $this->trackerManagerRepository->createAgent();
             $this->trackerManagerRepository->createDevice();
             $this->trackerManagerRepository->createDomain();
+            return true;
         } catch (Exception $exception) {
             Log::error($exception);
+            return false;
         }
     }
 
@@ -125,9 +123,11 @@ class Tracker
                 $dataRoute = $this->getDataRoute();
                 $this->trackerManagerRepository->setDataRoute($dataRoute);
                 $this->trackerManagerRepository->createRoute();
+                return true;
             }
         }catch (Exception $exception) {
             Log::error($exception);
+            return false;
         }
 
     }
@@ -136,7 +136,7 @@ class Tracker
     /**
      * Configuration startup access
      */
-    protected function configureTrackeRepository()
+    public function configureTrackeRepository()
     {
         $this->trackerManagerRepository->checkTableExist();
         if($this->trackerManagerRepository->getCheckConfig() == false){
@@ -154,7 +154,7 @@ class Tracker
     /**
      * @return array
      */
-    protected function getDataAccessUser()
+    public function getDataAccessUser()
     {
         return [
             'client_ip' => $this->request->getClientIp(),
@@ -166,7 +166,7 @@ class Tracker
     /**
      * @return array
      */
-    protected function getDataDomain()
+    public function getDataDomain()
     {
         return [
             'url' => $this->request->url(),
@@ -196,10 +196,13 @@ class Tracker
     /**
      * @return array
      */
-    protected function getDataRoute()
+    public function getDataRoute()
     {
         $this->route = $this->request->route();
-        $time  = microtime(true) - LARAVEL_START;
+        $time  = 0;
+        if (defined('LARAVEL_START') && constant('LARAVEL_START') > 0) {
+            $time  = microtime(true) - LARAVEL_START;
+        }
         try {
             if (empty($this->route)) {
                 throw new Exception("Route is null NotFoundHttpException ");

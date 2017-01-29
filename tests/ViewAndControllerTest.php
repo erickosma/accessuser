@@ -6,7 +6,7 @@ use Illuminate\Filesystem\Filesystem;
  * Date: 03/12/16
  * Time: 07:52
  */
-class ViewAndController extends TestCasePackages
+class ViewAndControllerTest extends TestCasePackages
 {
 
 

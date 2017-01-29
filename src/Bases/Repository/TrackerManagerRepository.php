@@ -36,6 +36,7 @@ class TrackerManagerRepository
      */
     private $accessRepository;
 
+
     private $userAgentParser;
 
     protected $prefix;
@@ -368,11 +369,20 @@ class TrackerManagerRepository
 
     public function checkTableExist(){
         $table  = $this->prefix."accesses";
-        if(Schema::hasTable($table) == false){
+        $connection  = config('accessuser.database.connection');
+        if(Schema::connection($connection)->hasTable($table) == false){
             $this->checkConfig =false;
         }
         else{
             $this->checkConfig =true;
         }
     }
+    /**
+     * @return AccessRepository|RepositoryInterface
+     */
+    public function getAccessRepository()
+    {
+        return $this->accessRepository;
+    }
+
 }

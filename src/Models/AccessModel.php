@@ -8,6 +8,7 @@
 
 namespace Zoy\Accessuser\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -66,6 +67,20 @@ abstract class AccessModel extends Model
         $model->setTable(app('accessuser.prefix'));
         $model->save();
         return $model;
+    }
+
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    public function getCreatedAtAttribute($value)
+    {
+        Carbon::setLocale(config('app.locale'));
+        return Carbon::createFromTimestamp(strtotime($value))
+            ->timezone(config('app.timezone'))
+            ->format("d/m/Y H:i:s")
+        ;
     }
 
 

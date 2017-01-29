@@ -37,7 +37,6 @@ class AccessUserLogServiceProviderTest extends TestCasePackages
      */
     public function testItCanBeConstructed()
     {
-
         $this->assertInstanceOf(Illuminate\Support\ServiceProvider::class, $this->service_provider,"its ok");
     }
 

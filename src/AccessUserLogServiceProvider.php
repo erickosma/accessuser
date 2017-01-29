@@ -67,6 +67,9 @@ class AccessUserLogServiceProvider extends ServiceProvider
      */
     private function config()
     {
+        if(empty($this->app['config'])){
+            return  null;
+        }
         return $this->app['config'];
     }
 
@@ -80,7 +83,11 @@ class AccessUserLogServiceProvider extends ServiceProvider
      */
     protected function getConfig($key, $default = null)
     {
-        return $this->config()->get("accessuser.$key", $default);
+        //accessuser.enabled
+        if($this->config() != null){
+            return $this->config()->get("accessuser.{$key}", $default);
+        }
+        return Config::getConfig("accessuser.{$key}",$this->app , $default);
     }
 
     /**

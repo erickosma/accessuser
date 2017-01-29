@@ -1,5 +1,5 @@
 <?php
-namespace   Zoy\Accessuser\Http\Routes;
+namespace Zoy\Accessuser\Http\Routes;
 
 use Zoy\Accessuser\Http\Routes\RouteRegister;
 use Illuminate\Contracts\Routing\Registrar as Router;
@@ -22,28 +22,24 @@ class AccessUserLogRoute extends RouteRegister
     /**
      * Map all routes.
      *
-     * @param  \Illuminate\Contracts\Routing\Registrar  $router
+     * @param  \Illuminate\Contracts\Routing\Registrar $router
      */
     public function map(Router $router)
     {
         $this->get('/', [
-            'as'    => 'accessuserlog::index',
-            'uses'  => 'AccessUserLogController@index',
+            'as' => 'accessuserlog::index',
+            'uses' => 'AccessUserLogController@index',
+        ]);
+        $this->get('/show', [
+            'as' => 'accessuserlog::show',
+            'uses' => 'AccessUserLogController@show',
+        ]);
+        $this->get('/cols', [
+            'as' => 'accessuserlog::cols',
+            'uses' => 'AccessUserLogController@cols',
         ]);
 
-        $this->registerOtherRoutes();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Route Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Register logs routes.
-     */
-    private function registerOtherRoutes()
-    {
-
-    }
 
 }
