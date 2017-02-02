@@ -79,7 +79,7 @@ abstract class AccessModel extends Model
         Carbon::setLocale(config('app.locale'));
         return Carbon::createFromTimestamp(strtotime($value))
             ->timezone(config('app.timezone'))
-            ->format("d/m/Y H:i:s")
+
         ;
     }
 

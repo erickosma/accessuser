@@ -54,6 +54,10 @@ class Consolidates
      * @return \Zoy\Accessuser\Bases\Repository\AccessRepository
      */
     public  function getRepository(){
+        if(!empty($this->repo)){
+            return $this->repo;
+        }
+
         $repo = app('accessuser.repositories')->getAccessRepository();
         if(empty($repo)){
             $prefix = Config::getConfig('database.prefix',app(),'accessuser_');

@@ -13,6 +13,7 @@ use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Zoy\Accessuser\Bases\Consolidates;
+use Zoy\Accessuser\Bases\Statistic;
 
 
 class AccessUserLogController extends Controller
@@ -22,6 +23,7 @@ class AccessUserLogController extends Controller
 
     public function __construct(Consolidates $const)
     {
+       dd(Statistic::totalAccessPerMonth());
         $this->consolidates = $const;
     }
 

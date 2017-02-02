@@ -250,7 +250,7 @@
             </ul>
         </div>
         <div class="row">
-            <!-- Example row of columns -->
+            <!-- Example row of colu    mns -->
             <h2 class="col sub-header" id="title"> {!! $h1 !!}</h2>
             <hr>
         </div>
