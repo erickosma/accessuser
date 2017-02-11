@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddReferToTables extends Migration
+class AddReferToTables extends MigrationAccess
 {
 
     protected $table = 'access_agents';
