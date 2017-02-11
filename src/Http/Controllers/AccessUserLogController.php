@@ -23,7 +23,9 @@ class AccessUserLogController extends Controller
 
     public function __construct(Consolidates $const)
     {
-       dd(Statistic::totalAccessPerMonth());
+        //->groupBy('monthyear')
+       dd(Statistic::all());
+
         $this->consolidates = $const;
     }
 

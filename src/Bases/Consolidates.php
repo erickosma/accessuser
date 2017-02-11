@@ -121,6 +121,9 @@ class Consolidates
         $this->setFields($this->repo->getFields());
     }
 
+    /**
+     * @param $table
+     */
     public function doModel($table){
         switch ($table) {
             case 'Access':
@@ -144,6 +147,9 @@ class Consolidates
         }
     }
 
+    public function getModel(){
+       return  $this->repo->model();
+    }
 
     /**
      * @param $eloquentModel
