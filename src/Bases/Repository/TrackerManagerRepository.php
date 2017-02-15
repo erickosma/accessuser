@@ -9,6 +9,7 @@
 namespace Zoy\Accessuser\Bases\Repository;
 
 
+use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Schema;
 use Zoy\Accessuser\Bases\Repository\Contracts\RepositoryInterface;
 use Zoy\Accessuser\Bases\UserAgentParser;
@@ -69,10 +70,10 @@ class TrackerManagerRepository
     }
 
     /**
-     * @param SessionGuard|IlluminateSession $session
+     * @param AuthManager|SessionGuard|IlluminateSession $session
      * @internal param $IlluminateSession
      */
-    public function setSession(SessionGuard $session)
+    public function setSession(AuthManager $session)
     {
         $this->session = $session;
     }
@@ -100,7 +101,7 @@ class TrackerManagerRepository
             $data = $this->getDataAcess();
         }
         $modelAccess = $this->accessRepository->findOrCreate($data, ['id', 'uuid', 'client_ip']);
-        $this->accessId = $modelAccess->id;
+        $this->setAccessId($modelAccess->id);
         return $modelAccess;
     }
 
@@ -177,7 +178,7 @@ class TrackerManagerRepository
      */
     public function createUser()
     {
-        if(!$this->session->guest() && !empty($this->session->id())){
+        if(!$this->session->guard()->guest() && !empty($this->session->guard()->id())){
             $this->modelAgentsUser();
 
             $data = $this->getDataUser();
@@ -265,6 +266,9 @@ class TrackerManagerRepository
      */
     public function getAccessId()
     {
+        if(empty($this->accessId)){
+            $this->accessId = $this->session->guard()->getSession()->get('access_id');
+        }
         return $this->accessId;
     }
 
@@ -273,6 +277,7 @@ class TrackerManagerRepository
      */
     public function setAccessId($accessId)
     {
+        $this->session->guard()->getSession()->put('access_id', $accessId);
         $this->accessId = $accessId;
     }
 

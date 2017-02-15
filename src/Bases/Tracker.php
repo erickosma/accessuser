@@ -143,7 +143,7 @@ class Tracker
              throw new Exception("Table accesses not exist .Run migrate command");
         }
         //dd(auth()->user());
-        $this->trackerManagerRepository->setSession($this->laravel['auth']->guard());
+        $this->trackerManagerRepository->setSession($this->laravel['auth']);
         $dataAcess = $this->getDataAccessUser();
         $dataDomain = $this->getDataDomain();
         $this->trackerManagerRepository->setArrayAcess($dataAcess);

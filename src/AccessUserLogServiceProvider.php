@@ -104,7 +104,7 @@ class AccessUserLogServiceProvider extends ServiceProvider
      */
     public function getTracker()
     {
-        if (!$this->tracker) {
+        if (empty($this->tracker)) {
             $this->tracker = $this->app['accessuser'];
         }
         return $this->tracker;
