@@ -1,0 +1,18 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - hhvm
+  - nightly
+
+  env:
+    - DB=mysql
+    - APP_ENV=testing
+    - CACHE_DRIVER=array
+    - SESSION_DRIVER=array
+    - QUEUE_DRIVER=sync
+    - DB_TYPE=sqlite
+    - DB_CONNECTION=sqlite
+
+  script: phpunit  --coverage-text

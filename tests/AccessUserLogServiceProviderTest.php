@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\ServiceProvider;
 use Zoy\Accessuser\AccessUserLogServiceProvider;
 use Illuminate\Filesystem\Filesystem;
 /**
@@ -23,7 +24,9 @@ class AccessUserLogServiceProviderTest extends TestCasePackages
     public function setUp()
     {
         $this->setUpMocks();
-        $this->service_provider = new AccessUserLogServiceProvider($this->application_mock);
+        if (!empty($this->application_mock)) {
+            $this->service_provider = new AccessUserLogServiceProvider($this->application_mock);
+        }
         parent::setUp();
     }
 
@@ -37,6 +40,7 @@ class AccessUserLogServiceProviderTest extends TestCasePackages
      */
     public function testItCanBeConstructed()
     {
+        dd(get_class($this->service_provider));
         $this->assertInstanceOf(Illuminate\Support\ServiceProvider::class, $this->service_provider,"its ok");
     }
 
