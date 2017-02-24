@@ -13,4 +13,4 @@ env:
   - QUEUE_DRIVER=sync
   - DB_TYPE=sqlite
   - DB_CONNECTION=sqlite
-script: phpunit --configuration --coverage-text
+script: phpunit
