@@ -123,6 +123,7 @@ class Tracker
                 $dataRoute = $this->getDataRoute();
                 $this->trackerManagerRepository->setDataRoute($dataRoute);
                 $this->trackerManagerRepository->createRoute();
+                $this->trackerManagerRepository->createEventUser();
                 return true;
             }
         }catch (Exception $exception) {
@@ -213,6 +214,7 @@ class Tracker
             $name = $this->route->getName();
             $path = $this->route->getPath();
             $uri = $this->route->getUri();
+            $idEvent = $this->route->getParameter('id');
             $pathOrUri = empty($path) ? $uri : $path;
             $isAjax =  $this->request->ajax();
             return [
@@ -221,7 +223,8 @@ class Tracker
                 'name' => $name,
                 'path' => $pathOrUri,
                 'is_ajax' => $isAjax,
-                'time' => $time
+                'time' => $time,
+                'idEvent' => $idEvent
             ];
         } catch (Exception $ex) {
             Log::error($ex->getMessage());
@@ -232,7 +235,8 @@ class Tracker
                 'name' => 'error',
                 'path' => $ex->getMessage(),
                 'is_ajax' => false,
-                'time' => $time
+                'time' => $time,
+                'idEvent' => null
             ];
         }
     }

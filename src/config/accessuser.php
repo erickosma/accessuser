@@ -45,4 +45,9 @@ return [
         ],
     ],
 
+    'seeroute' =>[
+        'name' => false, //home.index
+        'controller' => false, //ServiceController@mostrevento
+    ]
+
 ];

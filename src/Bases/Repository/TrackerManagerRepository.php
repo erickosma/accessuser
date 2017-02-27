@@ -16,6 +16,7 @@ use Zoy\Accessuser\Bases\UserAgentParser;
 use Zoy\Accessuser\Models\AccessAgents;
 use Zoy\Accessuser\Models\AccessDevices;
 use Zoy\Accessuser\Models\AccessDomains;
+use Zoy\Accessuser\Models\AccessEventUser;
 use Zoy\Accessuser\Models\AccessRoutes;
 use Illuminate\Auth\SessionGuard;
 use Zoy\Accessuser\Models\AccessUserLog;
@@ -171,6 +172,39 @@ class TrackerManagerRepository
         return $this->accessRepository->create($data, $attr);
     }
 
+
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function createEventUser(array $data =[])
+    {
+        /* set  Zoy\Accessuser\Models\AccessDomain */
+        $this->modelEvent();
+        if(empty($data)){
+            $data = $this->getDataRoute();
+        }
+        if(empty($data['idEvent'])){
+            return false;
+        }
+        $seeRoute  = config('accessuser.seeroute');
+
+        $hasName = !empty($seeRoute["name"]) && !empty($data["name"]);
+        $hasController = !empty($seeRoute["controller"]) && !empty($data["controller"]);
+
+        if($hasName || $hasController ){
+            $attr = ["access_id", "evento_id"];
+            $saveData = ["access_id" => $data["access_id"],
+                        "evento_id" => $data["idEvent"]];
+            return $this->accessRepository->create($saveData, $attr);
+        }
+        return false;
+    }
+
+
+
+
     /**
      *
      *
@@ -243,6 +277,15 @@ class TrackerManagerRepository
     public function modelRoute()
     {
         $this->setModel(AccessRoutes::class);
+    }
+
+
+    /**
+     * Sete model agent
+     */
+    public function modelEvent()
+    {
+        $this->setModel(AccessEventUser::class);
     }
 
     /**
