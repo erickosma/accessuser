@@ -188,7 +188,7 @@ class Tracker
         $uuid = $this->request->cookie($this->cookieName);
         if ($cookie && empty($uuid)) {
             $uuid = (string)UUID::uuid4();
-            $cookie->queue($this->cookieName, $uuid, 10000);
+            $cookie->queue($this->cookieName, $uuid, 60*24*7); //1 semana
         }
         return $uuid;
     }
