@@ -105,9 +105,10 @@ class TrackerManagerRepository
         unset($where['client_ip']);
         $collectData  = $this->accessRepository->findWhere($where,['id', 'uuid', 'client_ip']);
         if(!$collectData->isEmpty()){
-            return  $collectData->first();
+            $modelAccess =  $collectData->first();
+        }else{
+            $modelAccess = $this->accessRepository->findOrCreate($data, ['id', 'uuid', 'client_ip']);
         }
-        $modelAccess = $this->accessRepository->findOrCreate($data, ['id', 'uuid', 'client_ip']);
         $this->setAccessId($modelAccess->id);
         return $modelAccess;
     }
