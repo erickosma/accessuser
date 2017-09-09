@@ -95,7 +95,10 @@ class AccessUserLogServiceProvider extends ServiceProvider
      */
     private function bootTracker()
     {
-        $this->getTracker()->boot();
+        $tracker =  $this->getTracker();
+        if(!empty($tracker)){
+            $tracker->boot();
+        }
     }
 
 
@@ -105,7 +108,7 @@ class AccessUserLogServiceProvider extends ServiceProvider
     public function getTracker()
     {
         if (empty($this->tracker)) {
-            $this->tracker = $this->app['accessuser'];
+            $this->tracker =   $this->app['accessuser'];
         }
         return $this->tracker;
     }
@@ -119,7 +122,7 @@ class AccessUserLogServiceProvider extends ServiceProvider
      */
     private function registerTracker()
     {
-        $this->app['accessuser'] = $this->app->share(function ($app) {
+        $this->app->singleton(['accessuser' => Tracker::class], function ($app) {
             $app['accessuser.loaded'] = true;
             return new Tracker(
                 $this->config(),
@@ -135,7 +138,7 @@ class AccessUserLogServiceProvider extends ServiceProvider
     public function registerRepositories()
     {
        // $this->app->register(\Prettus\Repository\Providers\LumenRepositoryServiceProvider::class);
-        $this->app['accessuser.repositories'] = $this->app->share(function ($app) {
+        $this->app->bind(['accessuser.repositories' => TrackerManagerRepository::class], function ($app) {
             $prefix = Config::getConfig('database.prefix',$app,'accessuser_');
             $app['accessuser.prefix'] = $prefix;
             $uaParser = new UserAgentParser();
