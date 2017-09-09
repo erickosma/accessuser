@@ -122,7 +122,7 @@ class AccessUserLogServiceProvider extends ServiceProvider
      */
     private function registerTracker()
     {
-        $this->app->singleton(['accessuser' => Tracker::class], function ($app) {
+        $this->app->singleton('accessuser', function ($app) {
             $app['accessuser.loaded'] = true;
             return new Tracker(
                 $this->config(),
@@ -138,7 +138,7 @@ class AccessUserLogServiceProvider extends ServiceProvider
     public function registerRepositories()
     {
        // $this->app->register(\Prettus\Repository\Providers\LumenRepositoryServiceProvider::class);
-        $this->app->bind(['accessuser.repositories' => TrackerManagerRepository::class], function ($app) {
+        $this->app->bind('accessuser.repositories', function ($app) {
             $prefix = Config::getConfig('database.prefix',$app,'accessuser_');
             $app['accessuser.prefix'] = $prefix;
             $uaParser = new UserAgentParser();
