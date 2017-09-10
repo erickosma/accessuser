@@ -212,10 +212,9 @@ class Tracker
             $controller = (isset($action['controller'])) ? class_basename($action['controller']) : "IndexController@index";
             list($controller, $action) = explode('@', $controller);
             $name = $this->route->getName();
-            $path = $this->route->getPath();
-            $uri = $this->route->getUri();
-            $idEvent = $this->route->getParameter('id');
-            $pathOrUri = empty($path) ? $uri : $path;
+            $uri = $this->route->uri();
+            $idEvent = $this->route->parameter('id');
+            $pathOrUri = $uri;
             $isAjax =  $this->request->ajax();
             return [
                 'controller' => $controller,
