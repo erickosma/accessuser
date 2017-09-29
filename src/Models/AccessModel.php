@@ -77,10 +77,7 @@ abstract class AccessModel extends Model
     public function getCreatedAtAttribute($value)
     {
         Carbon::setLocale(config('app.locale'));
-        return Carbon::createFromTimestamp(strtotime($value))
-            ->timezone(config('app.timezone'))
-
-        ;
+        return $value;
     }
 
 

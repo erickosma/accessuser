@@ -47,6 +47,7 @@ class AccessUserLogController extends Controller
         //dd($request);
         $columns = $this->consolidates->fillFields();
         $paginate = $this->consolidates->showTable($columns,$request->get('sort') , $request->get('filter') ,$request->get('per_page'));
+
         return response()->json($paginate)
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET');

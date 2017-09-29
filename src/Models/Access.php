@@ -10,6 +10,8 @@ class Access extends AccessModel
         'uuid',
         'client_ip'];
 
+
+
     public $fields = [
         [
             'name' => 'id',
@@ -34,8 +36,7 @@ class Access extends AccessModel
             'titleClass' => 'text-center',
             'dataClass' => 'text-center',
             'title' => 'Data',
-            'callback' =>'',
-            'visible' =>true
+            'visible' =>true,
             // 'callback' => 'formatDate|D/MM/Y'
         ],
         [
