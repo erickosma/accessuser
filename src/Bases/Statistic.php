@@ -12,6 +12,8 @@ namespace Zoy\Accessuser\Bases;
 use Illuminate\Support\Facades\Cache;
 use Zoy\Accessuser\Models\Access;
 use Illuminate\Support\Facades\DB;
+use Zoy\Accessuser\Models\AccessAgents;
+use Zoy\Accessuser\Models\AccessDevices;
 use Zoy\Accessuser\Models\AccessRoutes;
 
 class Statistic
@@ -116,7 +118,7 @@ class Statistic
     }
 
 
-    public static function totalPerMonth($model,$year=null)
+    public static function totalPerMonth($model,$year=null,$order="asc")
     {
         if (empty($year)) {
             $year = date("Y");
@@ -126,6 +128,7 @@ class Statistic
             DB::raw(self::monthYear("updated_at") . " as monthyear"))
             ->whereYear('updated_at', '=', $year)
             ->groupby('monthyear')
+            ->orderBy("updated_at","asc")
             ->get();
     }
 
@@ -146,4 +149,74 @@ class Statistic
         }
         return "CONCAT_WS('-',DAY({$campo}),MONTH({$campo}))";
     }
+
+
+    /**
+     * Count total top broweser
+     *
+     * @return mixed
+     */
+    public static function topAgent()
+    {
+        $consolidate = new Consolidates();
+        $consolidate->modelAgents();
+        return self::top(AccessAgents::class,"browser");
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function topPlataform()
+    {
+        $consolidate = new Consolidates();
+        $consolidate->modelDevice();
+        return self::top(AccessDevices::class,"platform");
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public static function topUrl()
+    {
+        $consolidate = new Consolidates();
+        $consolidate->modelRoute();
+        $where = "`path` != 'photo/{size}/{name}/{time}' 
+            AND `path` != 'imagecache/{template}/{filename}' 
+            AND `path` != 'imageevento/{size}/{name}/{time}/{grecy?}' ";
+
+        return self::top(AccessRoutes::class,"path",$where);
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function topDevice()
+    {
+        $consolidate = new Consolidates();
+        $consolidate->modelDevice();
+        return self::top(AccessDevices::class,"kind");
+    }
+
+
+    /**
+     * @param $model
+     * @param $group
+     * @param string $where
+     * @return mixed
+     */
+    public static function top($model,$group,$where ="")
+    {
+        $select =  $model::select(
+            DB::raw("count(id) as total"),
+            DB::raw($group))
+            ->groupby($group);
+
+        if(!empty($where)){
+            $select->whereRaw($where);
+        }
+        return $select->get();
+    }
+
 }
