@@ -135,19 +135,22 @@ class Statistic
     protected static function monthYear($campo)
     {
         $drive = DB::connection()->getDriverName();
-        if ($drive == "sqlite") {
-            return "strftime('%Y-%m', {$campo})";
-        }
         return "CONCAT_WS('-',MONTH({$campo}),YEAR({$campo}))";
+        /*if ($drive == "sqlite") {
+            return "strftime('%Y-%m', {$campo})";
+        }*/
+
     }
 
     protected static function dayMonth($campo)
     {
         $drive = DB::connection()->getDriverName();
+        return "CONCAT_WS('-',DAY({$campo}),MONTH({$campo}))";
+        /*
         if ($drive == "sqlite") {
             return "strftime('%d-%m', {$campo})";
         }
-        return "CONCAT_WS('-',DAY({$campo}),MONTH({$campo}))";
+        return "CONCAT_WS('-',DAY({$campo}),MONTH({$campo}))";*/
     }
 
 

@@ -23,11 +23,13 @@ class AccessUserLogServiceProviderTest extends TestCasePackages
 
     public function setUp()
     {
-        $this->setUpMocks();
-        if (!empty($this->application_mock)) {
-            $this->service_provider = new \Zoy\Accessuser\AccessUserLogServiceProvider($this->application_mock);
-        }
         parent::setUp();
+     //   $this->setUpMocks();
+        dd($this->app);
+        if (!empty($this->app)) {
+            $this->service_provider = new \Zoy\Accessuser\AccessUserLogServiceProvider($this->app);
+        }
+
     }
 
     protected function setUpMocks()

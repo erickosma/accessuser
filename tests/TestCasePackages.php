@@ -35,7 +35,7 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
 
         $pathApp =  realpath(__DIR__ . '/../../../../bootstrap/app.php');
         $this->app = require $pathApp;
-        $this->app->register('Zoy\Accessuser\AccessUserLogServiceProvider');
+        $this->app->register('\Zoy\Accessuser\AccessUserLogServiceProvider');
 
         //$this->app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
         $this->provider = $this->app->getProvider(\Zoy\Accessuser\AccessUserLogServiceProvider::class);
@@ -51,6 +51,7 @@ abstract class TestCasePackages extends Illuminate\Foundation\Testing\TestCase
      */
     public function setUp()
     {
+        $this->createApplication();
         parent::setUp();
         //$this->resolveApplicationConsoleKernel($this->app);
         //$this->resolveApplicationHttpKernel($this->app);
